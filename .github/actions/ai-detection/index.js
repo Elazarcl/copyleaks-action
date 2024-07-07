@@ -44,7 +44,7 @@ async function checkWriterDetector(token) {
   }
 };
 
-async function run(){
+async function run() {
   try {
     core.notice('getting token ...');
     const token = await getToken();
