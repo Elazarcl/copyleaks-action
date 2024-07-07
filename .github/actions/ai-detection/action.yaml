@@ -1,0 +1,5 @@
+name: 'Copyleaks scan'
+descriptionc: 'Scan pull request for AI-detection'
+runs:
+  using: 'node16'
+  main: 'index.js'

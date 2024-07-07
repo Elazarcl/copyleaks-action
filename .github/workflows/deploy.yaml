@@ -1,0 +1,17 @@
+name: Copyleaks Code Scan
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run Copyleaks ai detection
+      uses: ./.github/actions/ai-detection
