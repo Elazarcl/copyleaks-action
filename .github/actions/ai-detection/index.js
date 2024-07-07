@@ -51,6 +51,9 @@ async function run() {
     core.notice('running scan ...');
     const res = await checkWriterDetector(token);
     core.notice(`res: ${res}`);
+    if (res.data.summary.ai === 1) {
+      core.setFailed('AI detected in the code. Pipeline failed.');
+    }
   } catch (error) {
     console.error('Failed to complete the request:', error.message);
   }
