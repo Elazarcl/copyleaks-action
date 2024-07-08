@@ -15,3 +15,6 @@ jobs:
 
     - name: Run Copyleaks ai detection
       uses: ./.github/actions/ai-detection
+      with:
+        email: ${{ secrets.COPYLEAKS_EMAIL }}
+        api_key: ${{ secrets.COPYLEAKS_API_KEY }}
