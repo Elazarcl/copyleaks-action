@@ -3,11 +3,11 @@ const github = require('@actions/github');
 const exec = require('@actions/exec');
 const axios = require('axios');
 
-async function getToken() {
+async function getTokenAsync(email, apiKey) {
   const loginUrl = 'https://id.copyleaks.com/v3/account/login/api';
   const credentials = {
-    email: 'elazarb@copyleaks.com',
-    key: '6f950dfa-9f97-48b0-9fae-8dc9dd2e484b'
+    email: email,
+    key: apiKey
   };
 
   try {
@@ -23,7 +23,7 @@ async function getToken() {
   }
 };
 
-async function checkWriterDetector(token) {
+async function scanForAiDetectionAsync(token) {
   const scanId = 'scan_id';
   const apiUrl = `https://api.copyleaks.com/v2/writer-detector/${scanId}/check`;
   const data = {
@@ -38,7 +38,7 @@ async function checkWriterDetector(token) {
         'Content-Type': 'application/json'
       }
     });
-    console.log('Response:', response.data);
+    return response.data;
   } catch (error) {
     console.error('Error:', error.response ? error.response.data : error.message);
   }
@@ -46,12 +46,14 @@ async function checkWriterDetector(token) {
 
 async function run() {
   try {
+    const email = core.getInput('email');
+    const apiKey = core.getInput('api_key');
     core.notice('getting token ...');
-    const token = await getToken();
+    const token = await getTokenAsync(email, apiKey);
     core.notice('running scan ...');
-    const res = await checkWriterDetector(token);
-    core.notice(`res: ${res}`);
-    if (res.data.summary.ai === 1) {
+    const resData = await scanForAiDetectionAsync(token);
+    core.notice(`res: ${resData}`);
+    if (resData.summary.ai === 1) {
       core.setFailed('AI detected in the code. Pipeline failed.');
     }
   } catch (error) {
