@@ -1,0 +1,17 @@
+name: Copyleaks Scan Result Workflow
+
+on:
+  repository_dispatch:
+
+jobs:
+  ai-detection:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Print payload from webhook
+        run: |
+          echo "Received payload:"
+          echo "${{ toJson(github.event.client_payload) }}"
