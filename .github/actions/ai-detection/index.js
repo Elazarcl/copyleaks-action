@@ -4,6 +4,7 @@ const exec = require('@actions/exec');
 const axios = require('axios');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const local = true;
 
 const sampleCode = `
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -50,8 +51,8 @@ async function getTokenAsync(email, apiKey) {
 };
 
 async function scanForPlagiarismAsync(token, base64Content) {
-  const owner = github.context.repo.owner;
-  const repo = github.context.repo.repo;
+  const owner = local ? 'Elazarcl' : github.context.repo.owner;
+  const repo = local ? 'copyleaks-action' : github.context.repo.repo;
   const scanId = uuidv4();
   const apiUrl = `https://api.copyleaks.com/v3/scans/submit/file/${scanId}`;
   const webhookUrl = `https://api.github.com/repos/${owner}/${repo}/dispatches`;
@@ -62,7 +63,8 @@ async function scanForPlagiarismAsync(token, base64Content) {
     properties: {
       webhooks: {
         status: webhookUrl,
-        newResult: webhookUrl
+        newResult: webhookUrl,
+        newResultHeader: [['Authorization', 'token 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']],
       }
     }
   };
@@ -81,7 +83,7 @@ async function scanForPlagiarismAsync(token, base64Content) {
 
     if (response.status === 201) {
       core.notice('Plagiarism scan request was successful.');
-      core.notice(`Webhook sent to ${webhookUrl}`);
+      core.notice(`Webhook will be sent to ${webhookUrl}`);
     } else {
       core.warning(`Plagiarism scan request was not successful. Status code: ${response.status}`);
     }
@@ -136,7 +138,6 @@ async function getChangedFiles() {
 
 async function run() {
   try {
-    const local = true;
     const email = local ? 'elazarb@copyleaks.com' : core.getInput('email');
     const apiKey = local ? '6f950dfa-9f97-48b0-9fae-8dc9dd2e484b' : core.getInput('api_key');
 
