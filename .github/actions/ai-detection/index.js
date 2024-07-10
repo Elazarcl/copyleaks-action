@@ -4,7 +4,7 @@ const exec = require('@actions/exec');
 const axios = require('axios');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
-const local = true;
+const local = false;
 
 // some change
 
@@ -138,6 +138,40 @@ async function getChangedFiles() {
   }
 }
 
+
+async function triggerDispatchEventAsync(ghToken) {
+  const owner = local ? 'Elazarcl' : github.context.repo.owner;
+  const repo = local ? 'copyleaks-action' : github.context.repo.repo;
+  const scanId = uuidv4();
+  const webhookUrl = `https://api.github.com/repos/${owner}/${repo}/dispatches`;
+
+  try {
+    const dispatchData = {
+      event_type: "scan-result",
+      client_payload: {
+        file: 'sample_code.py',
+        scan_id: scanId
+      }
+    };
+
+    const dispatchResponse = await axios.post(webhookUrl, dispatchData, {
+      headers: {
+        'Accept': 'application/vnd.github.v3+json',
+        'Authorization': `token ${ghToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (dispatchResponse.status === 204) {
+      core.notice('Repository dispatch event was triggered successfully.');
+    } else {
+      core.warning(`Repository dispatch event was not successful. Status code: ${dispatchResponse.status}`);
+    }
+  } catch (error) {
+    console.error('Error:', error.response ? error.response.data : error.message);
+  }
+}
+
 async function run() {
   try {
     const email = local ? 'elazarb@copyleaks.com' : core.getInput('email');
@@ -149,7 +183,8 @@ async function run() {
 
     core.notice('running scan ...');
     const base64FileContent = getBase64EncodedFileContent(sampleCode);
-    await scanForPlagiarismAsync(copyleaksToken, base64FileContent, ghToken);
+    await triggerDispatchEventAsync(ghToken);
+    // await scanForPlagiarismAsync(copyleaksToken, base64FileContent, ghToken);
 
     // const resData = await scanForPlagiarismAsync(token, base64FileContent);
     // core.notice(`res: ${resData}`);
