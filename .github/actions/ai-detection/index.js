@@ -4,7 +4,7 @@ const exec = require('@actions/exec');
 const axios = require('axios');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
-const local = true;
+const local = false;
 
 const sampleCode = `
 from http.server import BaseHTTPRequestHandler, HTTPServer
