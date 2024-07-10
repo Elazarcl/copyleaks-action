@@ -18,3 +18,4 @@ jobs:
       with:
         email: ${{ secrets.COPYLEAKS_EMAIL }}
         api_key: ${{ secrets.COPYLEAKS_API_KEY }}
+        gh_token: ${{ secrets.MY_GITHUB_TOKEN }}

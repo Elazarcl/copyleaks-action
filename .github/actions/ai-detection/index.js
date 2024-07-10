@@ -50,7 +50,7 @@ async function getTokenAsync(email, apiKey) {
   }
 };
 
-async function scanForPlagiarismAsync(token, base64Content) {
+async function scanForPlagiarismAsync(token, base64Content, ghToken) {
   const owner = local ? 'Elazarcl' : github.context.repo.owner;
   const repo = local ? 'copyleaks-action' : github.context.repo.repo;
   const scanId = uuidv4();
@@ -64,7 +64,7 @@ async function scanForPlagiarismAsync(token, base64Content) {
       webhooks: {
         status: webhookUrl,
         newResult: webhookUrl,
-        newResultHeader: [['Authorization', 'token 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']],
+        newResultHeader: [['Authorization', `token ${ghToken}`]],
       }
     }
   };
@@ -140,13 +140,14 @@ async function run() {
   try {
     const email = local ? 'elazarb@copyleaks.com' : core.getInput('email');
     const apiKey = local ? '6f950dfa-9f97-48b0-9fae-8dc9dd2e484b' : core.getInput('api_key');
-
+    const ghToken = core.getInput('gh_token');
+    
     core.notice('getting token ...');
-    const token = await getTokenAsync(email, apiKey);
+    const copyleaksToken = await getTokenAsync(email, apiKey);
 
     core.notice('running scan ...');
     const base64FileContent = getBase64EncodedFileContent(sampleCode);
-    await scanForPlagiarismAsync(token, base64FileContent);
+    await scanForPlagiarismAsync(copyleaksToken, base64FileContent, ghToken);
 
     // const resData = await scanForPlagiarismAsync(token, base64FileContent);
     // core.notice(`res: ${resData}`);
