@@ -36,12 +36,12 @@ async function initScanAsync(copyleaksToken, installationId, owner, repo, commit
 }
 
 async function run() {
-  const email = local ? 'elazarb@copyleaks.com' : core.getInput('email');
-  const copyleaksToken = local ? 'D7797ECD1E570E881601FD0DF997E3DB1A6B7B6CAFB33B6EA61499BAE1C107B6' : core.getInput('api_key');
-  const installationId = local ? '52790603' : core.getInput('installation_id');
-  const owner = local ? 'Elazarcl' : github.context.repo.owner;
-  const repo = local ? 'copyleaks-action' : github.context.repo.repo;
-  const commitSha = local ? '3b25b74e380d7242d7979fa009017c3e5aa689a9' : github.context.sha;
+  const email = core.getInput('email');
+  const copyleaksToken = core.getInput('api_key');
+  const installationId = core.getInput('installation_id');
+  const owner = github.context.repo.owner;
+  const repo = github.context.repo.repo;
+  const commitSha = github.context.sha;
 
   await initScanAsync(copyleaksToken, installationId, owner, repo, commitSha)
 };
