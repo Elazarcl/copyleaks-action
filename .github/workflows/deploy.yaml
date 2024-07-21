@@ -17,6 +17,6 @@ jobs:
       uses: ./.github/actions/ai-detection
       with:
         copyleaks_account: ${{ secrets.COPYLEAKS_ACCOUNT }}
-        copyleaks_api_key: ${{ secrets.COPYLEAKS_API_KEY }}
+        copyleaks_token: ${{ secrets.COPYLEAKS_TOKEN }}
         installation_id: ${{ secrets.INSTALLATION_ID }}
 

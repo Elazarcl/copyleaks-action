@@ -37,7 +37,7 @@ async function initScanAsync(copyleaksToken, installationId, owner, repo, commit
 
 async function run() {
   const email = core.getInput('email');
-  const copyleaksToken = core.getInput('api_key');
+  const copyleaksToken = core.getInput('copyleaks_token');
   const installationId = core.getInput('installation_id');
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
