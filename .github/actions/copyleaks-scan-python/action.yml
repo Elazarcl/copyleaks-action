@@ -1,0 +1,5 @@
+name: 'Copyleaks Scans'
+descriptionc: 'Scan pull request for AI-detection'
+runs:
+  using: 'docker'
+  main: 'Dockerfile'
