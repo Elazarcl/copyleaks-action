@@ -1,4 +1,4 @@
-name: Copyleaks Code Scan
+name: Pull Request Workflow
 
 on:
   pull_request:
@@ -16,6 +16,7 @@ jobs:
     - name: Run Copyleaks ai detection
       uses: ./.github/actions/ai-detection
       with:
-        email: ${{ secrets.COPYLEAKS_EMAIL }}
-        api_key: ${{ secrets.COPYLEAKS_API_KEY }}
-        gh_token: ${{ secrets.MY_GITHUB_TOKEN }}
+        copyleaks_account: ${{ secrets.COPYLEAKS_ACCOUNT }}
+        copyleaks_api_key: ${{ secrets.COPYLEAKS_API_KEY }}
+        installation_id: ${{ secrets.INSTALLATION_ID }}
+
