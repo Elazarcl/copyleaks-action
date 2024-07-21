@@ -19,7 +19,7 @@ async function initScanAsync(copyleaksToken, installationId, owner, repo, commit
     CopyleaksToken: copyleaksToken
   };
 
-  const response = await axios.post('http://localhost:5290/api/workflow/create-check-run', scanRequestPayload, {
+  const response = await axios.post('https://cd5a42e31c40.ngrok.app/api/workflow/create-check-run', scanRequestPayload, {
     headers: {
       'Content-Type': 'application/json'
     },
