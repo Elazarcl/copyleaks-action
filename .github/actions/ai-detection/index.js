@@ -2,8 +2,6 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const axios = require('axios');
 
-const local = true;
-
 async function initScanAsync(copyleaksToken, installationId, owner, repo, commitSha) {
 
   if (!installationId) {
@@ -35,6 +33,11 @@ async function initScanAsync(copyleaksToken, installationId, owner, repo, commit
 }
 
 async function run() {
+  const eventName = github.context.eventName; 
+  if (eventName !== 'pull_request') {
+    throw new Error(`Expected a pull_request event, but got ${eventName}`);
+  }
+
   const email = core.getInput('email');
   const copyleaksToken = core.getInput('copyleaks_token');
   const installationId = core.getInput('installation_id');
