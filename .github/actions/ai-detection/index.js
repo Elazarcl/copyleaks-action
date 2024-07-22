@@ -1,7 +1,6 @@
-
-import * as core from '@actions/core';
-import * as github from '@actions/github';
-import axios from 'axios';
+const core = require('@actions/core');
+const github = require('@actions/github');
+const axios = require('axios');
 
 const local = true;
 
@@ -41,8 +40,8 @@ async function run() {
   const installationId = core.getInput('installation_id');
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
-  const commitSha = github.context.event.pull_request.head.sha;
-
+  const payload = JSON.stringify(github.context.payload, undefined, 2)
+  console.log(`The event payload: ${payload}`);  
   await initScanAsync(copyleaksToken, installationId, owner, repo, commitSha)
 };
 
