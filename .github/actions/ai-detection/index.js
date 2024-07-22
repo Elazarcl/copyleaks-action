@@ -30,7 +30,7 @@ async function initScanAsync(copyleaksToken, installationId, owner, repo, commit
   if (response.status == 201) {
     core.setOutput('scan initated successfully');
   } else {
-    core.setOutput('an error occured when trying to iniate the scan', response.status)
+    core.setOutput('an error occured when trying to initiate the scan', response.status)
   }
 }
 
@@ -41,9 +41,6 @@ async function run() {
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
   const commitSha = github.context.payload.pull_request.head.sha;
-  console.log(`The commit sha: ${commitSha}`);
-  const payload = JSON.stringify(github.context.payload, undefined, 2);
-  console.log(`The event payload: ${payload}`);  
   await initScanAsync(copyleaksToken, installationId, owner, repo, commitSha)
 };
 
