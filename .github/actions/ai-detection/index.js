@@ -3,7 +3,7 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import axios from 'axios';
 
-const local = true;
+// some change
 
 async function initScanAsync(copyleaksToken, installationId, owner, repo, commitSha) {
 
