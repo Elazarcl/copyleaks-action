@@ -1,9 +1,6 @@
-
-import * as core from '@actions/core';
-import * as github from '@actions/github';
-import axios from 'axios';
-
-// some change
+const core = require('@actions/core');
+const github = require('@actions/github');
+const axios = require('axios');
 
 async function initScanAsync(copyleaksToken, installationId, owner, repo, commitSha) {
 
@@ -31,18 +28,22 @@ async function initScanAsync(copyleaksToken, installationId, owner, repo, commit
   if (response.status == 201) {
     core.setOutput('scan initated successfully');
   } else {
-    core.setOutput('an error occured when trying to iniate the scan', response.status)
+    core.setOutput('an error occured when trying to initiate the scan', response.status)
   }
 }
 
 async function run() {
+  const eventName = github.context.eventName; 
+  if (eventName !== 'pull_request') {
+    throw new Error(`Expected a pull_request event, but got ${eventName}`);
+  }
+
   const email = core.getInput('email');
   const copyleaksToken = core.getInput('copyleaks_token');
   const installationId = core.getInput('installation_id');
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
-  const commitSha = github.context.event.pull_request.head.sha;
-
+  const commitSha = github.context.payload.pull_request.head.sha;
   await initScanAsync(copyleaksToken, installationId, owner, repo, commitSha)
 };
 
