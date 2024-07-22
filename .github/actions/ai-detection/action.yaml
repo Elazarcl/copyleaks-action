@@ -1,4 +1,4 @@
-name: 'Copyleaks scan'
+name: 'Copyleaks Scans'
 descriptionc: 'Scan pull request for AI-detection'
 runs:
   using: 'node16'
