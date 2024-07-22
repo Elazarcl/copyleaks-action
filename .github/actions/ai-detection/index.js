@@ -31,7 +31,7 @@ async function initScanAsync(copyleaksToken, installationId, owner, repo, commit
   if (response.status == 201) {
     core.setOutput('scan initated successfully');
   } else {
-    core.setOutput('an error occured when trying to iniate the scan', response)
+    core.setOutput('an error occured when trying to iniate the scan', response.status)
   }
 }
 
