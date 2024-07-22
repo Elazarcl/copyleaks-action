@@ -40,7 +40,9 @@ async function run() {
   const installationId = core.getInput('installation_id');
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
+  const commitSha = github.context.payload.pull_request.head.sha;
+  console.log(`The commit sha: ${commitSha}`);
+  const payload = JSON.stringify(github.context.payload, undefined, 2);
   console.log(`The event payload: ${payload}`);  
   await initScanAsync(copyleaksToken, installationId, owner, repo, commitSha)
 };
