@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const axios = require('axios');
 
-async function initScanAsync(copyleaksToken, installationId, owner, repo, commitSha) {
+async function initScanAsync(copyleaksApiKey, copyleaksEmail, installationId, owner, repo, commitSha) {
 
   if (!installationId) {
     throw new Error('Installation ID must be provided.');
@@ -13,7 +13,8 @@ async function initScanAsync(copyleaksToken, installationId, owner, repo, commit
     Owner: owner,
     Repo: repo,
     CommitSha: commitSha,
-    CopyleaksToken: copyleaksToken
+    CopyleaksApiKey: copyleaksApiKey,
+    CopyleaksEmail: copyleaksEmail
   };
 
   const response = await axios.post('https://cd5a42e31c40.ngrok.app/api/workflow/create-check-run', scanRequestPayload, {
@@ -38,13 +39,13 @@ async function run() {
     throw new Error(`Expected a pull_request event, but got ${eventName}`);
   }
 
-  const email = core.getInput('email');
-  const copyleaksToken = core.getInput('copyleaks_token');
+  const copyleaksEmail = core.getInput('copyleaks_email');
+  const copyleaksApiKey = core.getInput('copyleaks_api_key');
   const installationId = core.getInput('installation_id');
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
   const commitSha = github.context.payload.pull_request.head.sha;
-  await initScanAsync(copyleaksToken, installationId, owner, repo, commitSha)
+  await initScanAsync(copyleaksApiKey, copyleaksEmail, installationId, owner, repo, commitSha)
 };
 
 run();
