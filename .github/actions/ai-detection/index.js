@@ -44,8 +44,9 @@ async function run() {
   const installationId = core.getInput('installation_id');
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
-  const commitSha = github.context.payload.pull_request.head.sha;
-  await initScanAsync(copyleaksApiKey, copyleaksEmail, installationId, owner, repo, commitSha)
+  // const headCommitSha = github.context.payload.pull_request.head.sha;
+  // const mergeCommitSha = github.context.payload.pull_request.merge_commit_sha;
+  await initScanAsync(copyleaksApiKey, copyleaksEmail, installationId, owner, repo, '050b849d3f873d4c14f36c16f912c6f1f87b7978')
 };
 
 run();
