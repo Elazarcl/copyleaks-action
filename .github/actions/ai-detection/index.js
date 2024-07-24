@@ -44,10 +44,8 @@ async function run() {
   const installationId = core.getInput('installation_id');
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
-  // const headCommitSha = github.context.payload.pull_request.head.sha;
-  const mergeCommitSha = github.context.payload.pull_request.merge_commit_sha;
-  console.log(mergeCommitSha);
-  await initScanAsync(copyleaksApiKey, copyleaksEmail, installationId, owner, repo, mergeCommitSha);
+  const headCommitSha = github.context.payload.pull_request.head.sha;
+  await initScanAsync(copyleaksApiKey, copyleaksEmail, installationId, owner, repo, headCommitSha);
 };
 
 run();
