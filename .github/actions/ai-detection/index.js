@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const axios = require('axios');
 
-async function initScanAsync(copyleaksApiKey, copyleaksEmail, installationId, owner, repo, commitSha) {
+async function initScanAsync(copyleaksApiKey, copyleaksEmail, installationId, owner, repo, headCommitSha, pullRequestNumber) {
 
   if (!installationId) {
     throw new Error('Installation ID must be provided.');
@@ -12,7 +12,8 @@ async function initScanAsync(copyleaksApiKey, copyleaksEmail, installationId, ow
     InstallationId: installationId,
     Owner: owner,
     Repo: repo,
-    CommitSha: commitSha,
+    HeadCommitSha: headCommitSha,
+    PullRequestNumber: pullRequestNumber,
     CopyleaksApiKey: copyleaksApiKey,
     CopyleaksEmail: copyleaksEmail
   };
@@ -45,7 +46,8 @@ async function run() {
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
   const headCommitSha = github.context.payload.pull_request.head.sha;
-  await initScanAsync(copyleaksApiKey, copyleaksEmail, installationId, owner, repo, headCommitSha);
+  const pullRequestNumber = github.context.payload.pull_request.number;
+  await initScanAsync(copyleaksApiKey, copyleaksEmail, installationId, owner, repo, headCommitSha, pullRequestNumber);
 };
 
 run();
